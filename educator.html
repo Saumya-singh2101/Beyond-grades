@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educator Panel - EduReform AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Educator Panel Specific Styles */
+        .educator-container {
+            padding: 100px 2rem 2rem 2rem;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .educator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .educator-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .educator-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .class-selector {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: #ffffff;
+            padding: 0.75rem 1rem;
+            font-family: var(--font-primary);
+            min-width: 150px;
+        }
+
+        .export-btn, .refresh-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 15px;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .export-btn {
+            background: var(--secondary-gradient);
+        }
+
+        .refresh-btn {
+            background: var(--accent-gradient);
+        }
+
+        .export-btn:hover, .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Overview Cards */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .overview-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition-smooth);
+        }
+
+        .overview-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+        }
+
+        .overview-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 0.5rem;
+        }
+
+        .overview-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .overview-description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Student Grid */
+        .students-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .view-toggle button {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .view-toggle button.active {
+            background: #4facfe;
+            color: #ffffff;
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .student-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        .student-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(31, 38, 135, 0.3);
+        }
+
+        .student-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .student-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .student-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        .status-inactive {
+            background: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .student-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4facfe;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.25rem;
+        }
+
+        .skill-progress {
+            margin-top: 1rem;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-name {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .skill-score {
+            font-size: 0.9rem;
+            color: #4facfe;
+            font-weight: 600;
+        }
+
+        .skill-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 0.25rem;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            border-radius: 2px;
+            transition: width 1s ease;
+        }
+
+        /* Analytics Section */
+        .analytics-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .analytics-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Progress Chart */
+        .progress-chart {
+            height: 200px;
+            position: relative;
+            display: flex;
+            align-items: end;
+            gap: 1rem;
+            padding: 1rem 0;
+            margin-bottom: 1rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bar-visual {
+            width: 100%;
+            max-width: 40px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: var(--accent-gradient);
+            border-radius: 20px;
+            transition: height 1.5s ease;
+        }
+
+        .bar-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+        }
+
+        /* Insights Panel */
+        .insights-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .insight-item {
+            background: rgba(79, 172, 254, 0.1);
+            border-left: 4px solid #4facfe;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .insight-type {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #4facfe;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .insight-text {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Recommendations */
+        .recommendations-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .recommendation-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .recommendation-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .recommendation-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #f093fb;
+        }
+
+        .recommendation-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+        }
+
+        .recommendation-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .action-tag {
+            background: var(--secondary-gradient);
+            color: #ffffff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Table View */
+        .students-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .students-table.active {
+            display: table;
+        }
+
+        .students-table th,
+        .students-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .students-table th {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            color: #4facfe;
+        }
+
+        .students-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .analytics-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .educator-container {
+                padding: 100px 1rem 2rem 1rem;
+            }
+
+            .educator-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .educator-controls {
+                justify-content: center;
+            }
+
+            .overview-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .students-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .student-metrics {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Loading States */
+        .loading-skeleton {
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0.1) 25%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+            border-radius: 8px;
+            height: 20px;
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-brand">
+            <h2>EduReform AI</h2>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="learning.html" class="nav-link">Learn</a>
+            <a href="educator.html" class="nav-link">Educator</a>
+        </div>
+        <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Educator Container -->
+    <div class="educator-container">
+        <!-- Header -->
+        <div class="educator-header">
+            <h1 class="educator-title">Educator Analytics</h1>
+            <div class="educator-controls">
+                <select class="class-selector" id="classSelector" onchange="changeClass()">
+                    <option value="all">All Classes</option>
+                    <option value="class-a">Class A (25 students)</option>
+                    <option value="class-b">Class B (28 students)</option>
+                    <option value="class-c">Class C (22 students)</option>
+                </select>
+                <button class="refresh-btn" onclick="refreshData()">
+                    <span>🔄</span> Refresh
+                </button>
+                <button class="export-btn" onclick="exportAnalytics()">
+                    <span>📊</span> Export Data
+                </button>
+            </div>
+        </div>
+
+        <!-- Overview Cards -->
+        <div class="overview-grid">
+            <div class="overview-card">
+                <div class="overview-value" id="totalStudents">75</div>
+                <div class="overview-label">Total Students</div>
+                <div class="overview-description">Across all classes</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-value" id="averageProgress">78%</div>
+                <div class="overview-label">Average Progress</div>
+                <div class="overview-description">Skill development</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-value" id="activeStudents">52</div>
+                <div class="overview-label">Active Students</div>
+                <div class="overview-description">Last 7 days</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-value" id="completionRate">85%</div>
+                <div class="overview-label">Completion Rate</div>
+                <div class="overview-description">Learning modules</div>
+            </div>
+        </div>
+
+        <!-- Students Section -->
+        <div class="students-section">
+            <div class="section-header">
+                <h2 class="section-title">Student Progress Tracking</h2>
+                <div class="view-toggle">
+                    <button class="active" onclick="toggleView('grid')">Grid View</button>
+                    <button onclick="toggleView('table')">Table View</button>
+                </div>
+            </div>
+
+            <!-- Grid View -->
+            <div id="studentsGrid" class="students-grid">
+                <!-- Students will be populated here -->
+            </div>
+
+            <!-- Table View -->
+            <table id="studentsTable" class="students-table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Status</th>
+                        <th>Critical Thinking</th>
+                        <th>Creativity</th>
+                        <th>Reasoning</th>
+                        <th>Communication</th>
+                        <th>Last Active</th>
+                    </tr>
+                </thead>
+                <tbody id="studentsTableBody">
+                    <!-- Table rows will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="analytics-section">
+            <div class="analytics-card">
+                <h3 class="analytics-title">Weekly Progress Trends</h3>
+                <div class="progress-chart" id="progressChart">
+                    <!-- Chart bars will be generated here -->
+                </div>
+                <p style="text-align: center; color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">
+                    Average skill improvement over the past 7 days
+                </p>
+            </div>
+
+            <div class="analytics-card">
+                <h3 class="analytics-title">AI-Generated Insights</h3>
+                <div class="insights-list" id="insightsList">
+                    <!-- Insights will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations Section -->
+        <div class="recommendations-section">
+            <h2 class="section-title">Personalized Teaching Recommendations</h2>
+            <div id="recommendationsList">
+                <!-- Recommendations will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Button (Floating) -->
+    <div id="chatButton" class="chat-button" onclick="toggleChat()">
+        <div class="chat-icon">
+            <div class="chat-dot"></div>
+            <div class="chat-dot"></div>
+            <div class="chat-dot"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="geminiAPI.js"></script>
+    <script src="chatbot.js"></script>
+    <script>
+        // Educator Panel JavaScript
+        let currentClass = 'all';
+        let currentView = 'grid';
+        let studentsData = [];
+
+        // Sample student data
+        const demoStudents = [
+            {
+                id: 1, name: 'Emma Johnson', status: 'active', class: 'class-a',
+                skills: { criticalThinking: 85, creativity: 72, reasoning: 91, communication: 68 },
+                progress: 78, lastActive: '2 hours ago', modules: 12, scenarios: 8
+            },
+            {
+                id: 2, name: 'Marcus Chen', status: 'active', class: 'class-a',
+                skills: { criticalThinking: 79, creativity: 88, reasoning: 83, communication: 75 },
+                progress: 82, lastActive: '1 day ago', modules: 15, scenarios: 12
+            },
+            {
+                id: 3, name: 'Sophia Rodriguez', status: 'inactive', class: 'class-b',
+                skills: { criticalThinking: 92, creativity: 85, reasoning: 88, communication: 80 },
+                progress: 86, lastActive: '3 days ago', modules: 18, scenarios: 15
+            },
+            {
+                id: 4, name: 'James Wilson', status: 'active', class: 'class-b',
+                skills: { criticalThinking: 77, creativity: 70, reasoning: 82, communication: 73 },
+                progress: 75, lastActive: '5 hours ago', modules: 10, scenarios: 6
+            },
+            {
+                id: 5, name: 'Aisha Patel', status: 'active', class: 'class-c',
+                skills: { criticalThinking: 88, creativity: 94, reasoning: 85, communication: 91 },
+                progress: 89, lastActive: '30 minutes ago', modules: 20, scenarios: 18
+            },
+            {
+                id: 6, name: 'Oliver Brown', status: 'inactive', class: 'class-c',
+                skills: { criticalThinking: 73, creativity: 68, reasoning: 75, communication: 69 },
+                progress: 71, lastActive: '1 week ago', modules: 8, scenarios: 4
+            }
+        ];
+
+        // Initialize educator panel
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize data
+            loadStudentData();
+            renderOverview();
+            renderStudents();
+            renderAnalytics();
+            renderRecommendations();
+
+            console.log('Educator panel initialized');
+        });
+
+        function loadStudentData() {
+            // In a real app, this would fetch from server
+            studentsData = demoStudents;
+        }
+
+        function renderOverview() {
+            const filteredStudents = getFilteredStudents();
+            const activeStudents = filteredStudents.filter(s => s.status === 'active');
+            const avgProgress = Math.round(filteredStudents.reduce((sum, s) => sum + s.progress, 0) / filteredStudents.length);
+            const completionRate = Math.round(filteredStudents.reduce((sum, s) => sum + (s.modules / 20 * 100), 0) / filteredStudents.length);
+
+            document.getElementById('totalStudents').textContent = filteredStudents.length;
+            document.getElementById('averageProgress').textContent = avgProgress + '%';
+            document.getElementById('activeStudents').textContent = activeStudents.length;
+            document.getElementById('completionRate').textContent = completionRate + '%';
+        }
+
+        function renderStudents() {
+            if (currentView === 'grid') {
+                renderStudentsGrid();
+            } else {
+                renderStudentsTable();
+            }
+        }
+
+        function renderStudentsGrid() {
+            const container = document.getElementById('studentsGrid');
+            const students = getFilteredStudents();
+            
+            container.innerHTML = students.map(student => `
+                <div class="student-card" onclick="viewStudent(${student.id})">
+                    <div class="student-header">
+                        <div class="student-name">${student.name}</div>
+                        <div class="student-status status-${student.status}">
+                            ${student.status.charAt(0).toUpperCase() + student.status.slice(1)}
+                        </div>
+                    </div>
+                    
+                    <div class="student-metrics">
+                        <div class="metric">
+                            <div class="metric-value">${student.progress}%</div>
+                            <div class="metric-label">Progress</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">${student.modules}</div>
+                            <div class="metric-label">Modules</div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-progress">
+                        <div class="skill-item">
+                            <span class="skill-name">Critical Thinking</span>
+                            <span class="skill-score">${student.skills.criticalThinking}%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: ${student.skills.criticalThinking}%"></div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <span class="skill-name">Creativity</span>
+                            <span class="skill-score">${student.skills.creativity}%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: ${student.skills.creativity}%"></div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <span class="skill-name">Reasoning</span>
+                            <span class="skill-score">${student.skills.reasoning}%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: ${student.skills.reasoning}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderStudentsTable() {
+            const tbody = document.getElementById('studentsTableBody');
+            const students = getFilteredStudents();
+            
+            tbody.innerHTML = students.map(student => `
+                <tr onclick="viewStudent(${student.id})">
+                    <td>${student.name}</td>
+                    <td><span class="student-status status-${student.status}">${student.status.charAt(0).toUpperCase() + student.status.slice(1)}</span></td>
+                    <td>${student.skills.criticalThinking}%</td>
+                    <td>${student.skills.creativity}%</td>
+                    <td>${student.skills.reasoning}%</td>
+                    <td>${student.skills.communication}%</td>
+                    <td>${student.lastActive}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderAnalytics() {
+            renderProgressChart();
+            renderInsights();
+        }
+
+        function renderProgressChart() {
+            const chartContainer = document.getElementById('progressChart');
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const progress = [75, 78, 82, 79, 85, 88, 84]; // Sample data
+            
+            chartContainer.innerHTML = days.map((day, index) => `
+                <div class="chart-bar">
+                    <div class="bar-visual">
+                        <div class="bar-fill" style="height: ${progress[index]}%"></div>
+                    </div>
+                    <div class="bar-label">${day}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderInsights() {
+            const insights = [
+                {
+                    type: 'Performance Trend',
+                    text: 'Students show 12% improvement in critical thinking over the past month. Continue emphasizing analytical exercises.'
+                },
+                {
+                    type: 'Learning Pattern',
+                    text: 'Peak engagement occurs during morning sessions (9-11 AM). Consider scheduling complex topics during this time.'
+                },
+                {
+                    type: 'Skill Gap',
+                    text: 'Communication skills lag behind other areas. Implement more group discussions and presentation activities.'
+                },
+                {
+                    type: 'Progress Alert',
+                    text: '3 students haven\'t accessed the platform in over a week. Consider reaching out for personalized support.'
+                }
+            ];
+            
+            const container = document.getElementById('insightsList');
+            container.innerHTML = insights.map(insight => `
+                <div class="insight-item">
+                    <div class="insight-type">${insight.type}</div>
+                    <div class="insight-text">${insight.text}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderRecommendations() {
+            const recommendations = [
+                {
+                    title: 'Enhance Critical Thinking Modules',
+                    description: 'Based on student performance data, consider adding more Socratic questioning exercises and case study analysis.',
+                    actions: ['Add Case Studies', 'Implement Peer Reviews', 'Create Debate Sessions']
+                },
+                {
+                    title: 'Address Communication Skills Gap',
+                    description: 'Students are excelling in analytical areas but need more practice in articulating their thoughts clearly.',
+                    actions: ['Group Presentations', 'Written Reflections', 'Peer Feedback']
+                },
+                {
+                    title: 'Personalized Learning Paths',
+                    description: 'Top performers are ready for advanced challenges, while others need foundational support.',
+                    actions: ['Advanced Tracks', 'Remedial Support', 'Mentor Pairing']
+                }
+            ];
+            
+            const container = document.getElementById('recommendationsList');
+            container.innerHTML = recommendations.map(rec => `
+                <div class="recommendation-item">
+                    <div class="recommendation-title">${rec.title}</div>
+                    <div class="recommendation-description">${rec.description}</div>
+                    <div class="recommendation-actions">
+                        ${rec.actions.map(action => `<span class="action-tag">${action}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getFilteredStudents() {
+            if (currentClass === 'all') {
+                return studentsData;
+            }
+            return studentsData.filter(student => student.class === currentClass);
+        }
+
+        function changeClass() {
+            currentClass = document.getElementById('classSelector').value;
+            renderOverview();
+            renderStudents();
+            renderAnalytics();
+        }
+
+        function toggleView(view) {
+            currentView = view;
+            
+            // Update button states
+            document.querySelectorAll('.view-toggle button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[onclick="toggleView('${view}')"]`).classList.add('active');
+            
+            // Toggle visibility
+            const grid = document.getElementById('studentsGrid');
+            const table = document.getElementById('studentsTable');
+            
+            if (view === 'grid') {
+                grid.style.display = 'grid';
+                table.classList.remove('active');
+                renderStudentsGrid();
+            } else {
+                grid.style.display = 'none';
+                table.classList.add('active');
+                renderStudentsTable();
+            }
+        }
+
+        function viewStudent(studentId) {
+            const student = studentsData.find(s => s.id === studentId);
+            if (!student) return;
+            
+            window.eduReformApp.showNotification(
+                `Detailed view for ${student.name} coming soon! This would show comprehensive analytics and learning history.`,
+                'info'
+            );
+        }
+
+        function refreshData() {
+            // Show loading state
+            const button = event.target.closest('.refresh-btn');
+            button.innerHTML = '<span>⏳</span> Refreshing...';
+            button.disabled = true;
+            
+            // Simulate data refresh
+            setTimeout(() => {
+                // In a real app, this would fetch fresh data from server
+                loadStudentData();
+                renderOverview();
+                renderStudents();
+                renderAnalytics();
+                
+                button.innerHTML = '<span>🔄</span> Refresh';
+                button.disabled = false;
+                
+                window.eduReformApp.showNotification('Data refreshed successfully!', 'success');
+            }, 1500);
+        }
+
+        function exportAnalytics() {
+            const exportData = {
+                timestamp: new Date().toISOString(),
+                class: currentClass,
+                overview: {
+                    totalStudents: document.getElementById('totalStudents').textContent,
+                    averageProgress: document.getElementById('averageProgress').textContent,
+                    activeStudents: document.getElementById('activeStudents').textContent,
+                    completionRate: document.getElementById('completionRate').textContent
+                },
+                students: getFilteredStudents().map(student => ({
+                    name: student.name,
+                    status: student.status,
+                    progress: student.progress,
+                    skills: student.skills,
+                    modules: student.modules,
+                    scenarios: student.scenarios,
+                    lastActive: student.lastActive
+                })),
+                insights: [
+                    'Students show 12% improvement in critical thinking over the past month',
+                    'Peak engagement occurs during morning sessions (9-11 AM)',
+                    'Communication skills lag behind other areas',
+                    '3 students haven\'t accessed the platform in over a week'
+                ]
+            };
+            
+            // Create and download JSON file
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `edureform-analytics-${currentClass}-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            window.eduReformApp.showNotification('Analytics exported successfully!', 'success');
+        }
+
+        // Initialize animations on load
+        setTimeout(() => {
+            document.querySelectorAll('.skill-fill').forEach(bar => {
+                bar.style.width = bar.style.width;
+            });
+            
+            document.querySelectorAll('.bar-fill').forEach(bar => {
+                bar.style.height = bar.style.height;
+            });
+        }, 500);
+    </script>
+</body>
+</html>

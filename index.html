@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduReform AI - Transforming Education Through Intelligence</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-brand">
+            <h2>EduReform AI</h2>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="learning.html" class="nav-link">Learn</a>
+            <a href="educator.html" class="nav-link">Educator</a>
+            <a href="#features" class="nav-link">Features</a>
+        </div>
+        <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Transform Learning with
+                <span class="gradient-text">AI-Powered Intelligence</span>
+            </h1>
+            <p class="hero-description">
+                Shift from rote memorization to active exploration. Discover your unique learning path 
+                with personalized AI mentorship and skill-based education.
+            </p>
+            <div class="hero-actions">
+                <button class="btn-hero-primary" onclick="window.location.href='dashboard.html'">Start Learning</button>
+                <button class="btn-hero-secondary" onclick="scrollToFeatures()">Explore Features</button>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="glass-card hero-card">
+                <div class="ai-animation">
+                    <div class="brain-icon">
+                        <div class="neuron"></div>
+                        <div class="neuron"></div>
+                        <div class="neuron"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="section-header">
+            <h2 class="section-title">Revolutionary Learning Features</h2>
+            <p class="section-description">
+                Experience education tailored to your cognitive patterns and learning style
+            </p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card" data-feature="chatbot">
+                <div class="feature-icon">
+                    <div class="icon-shape icon-chat"></div>
+                </div>
+                <h3>AI Mentor Chatbot</h3>
+                <p>Real-time conversations with Gemini AI that adapt to your reasoning level and ask probing questions.</p>
+                <div class="feature-stats">
+                    <span class="stat">Real-time Responses</span>
+                    <span class="stat">Adaptive Questioning</span>
+                </div>
+            </div>
+
+            <div class="feature-card" data-feature="skillmap">
+                <div class="feature-icon">
+                    <div class="icon-shape icon-map"></div>
+                </div>
+                <h3>Skill Map Dashboard</h3>
+                <p>Visualize your cognitive strengths, track reasoning development, and discover career pathways.</p>
+                <div class="feature-stats">
+                    <span class="stat">Dynamic Tracking</span>
+                    <span class="stat">Career Insights</span>
+                </div>
+            </div>
+
+            <div class="feature-card" data-feature="interactive">
+                <div class="feature-icon">
+                    <div class="icon-shape icon-timeline"></div>
+                </div>
+                <h3>Interactive Modules</h3>
+                <p>Explore historical events through cause-effect chains and alternative scenario simulations.</p>
+                <div class="feature-stats">
+                    <span class="stat">Drag & Drop</span>
+                    <span class="stat">What-If Scenarios</span>
+                </div>
+            </div>
+
+            <div class="feature-card" data-feature="educator">
+                <div class="feature-icon">
+                    <div class="icon-shape icon-analytics"></div>
+                </div>
+                <h3>Educator Analytics</h3>
+                <p>Track student growth beyond grades - monitor creativity, inquiry depth, and reasoning ability.</p>
+                <div class="feature-stats">
+                    <span class="stat">Growth Metrics</span>
+                    <span class="stat">Export Insights</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="about-content">
+            <div class="about-text">
+                <h2>Redefining Educational Success</h2>
+                <p>
+                    EduReform AI moves beyond traditional memorization-based learning to foster critical thinking, 
+                    creativity, and deep understanding. Our platform uses advanced AI to create personalized 
+                    learning experiences that adapt to each student's unique cognitive patterns.
+                </p>
+                <div class="about-features">
+                    <div class="about-feature">
+                        <h4>Personalized Learning</h4>
+                        <p>AI adapts to your learning style and pace</p>
+                    </div>
+                    <div class="about-feature">
+                        <h4>Skill-Based Assessment</h4>
+                        <p>Focus on reasoning and creativity over memorization</p>
+                    </div>
+                    <div class="about-feature">
+                        <h4>Real-Time Insights</h4>
+                        <p>Track cognitive development and growth patterns</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-visual">
+                <div class="glass-card about-card">
+                    <div class="progress-demo">
+                        <div class="progress-item">
+                            <span>Critical Thinking</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <span>Creative Problem Solving</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 72%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <span>Analytical Reasoning</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 91%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Chat Button (Floating) -->
+    <div id="chatButton" class="chat-button" onclick="toggleChat()">
+        <div class="chat-icon">
+            <div class="chat-dot"></div>
+            <div class="chat-dot"></div>
+            <div class="chat-dot"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="geminiAPI.js"></script>
+    <script src="chatbot.js"></script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beyond Grades: Reimagining Education</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+</head>
+<body>
+    <!-- Particle Background -->
+    <div id="particles-background"></div>
+    
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="cyber-logo">
+                <h1 class="glitch-text" data-text="BEYOND GRADES">BEYOND GRADES</h1>
+                <div class="loading-bar">
+                    <div class="loading-progress"></div>
+                </div>
+                <p class="loading-text">Initializing Neural Learning Matrix...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="main-nav glassmorphism">
+        <div class="nav-brand">
+            <i class="fas fa-brain neon-icon"></i>
+            <span class="brand-text">BeyondGrades</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="#dashboard" class="nav-link active" data-section="dashboard">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a></li>
+            <li><a href="#learning" class="nav-link" data-section="learning">
+                <i class="fas fa-rocket"></i> Learning Hub
+            </a></li>
+            <li><a href="#mentor" class="nav-link" data-section="mentor">
+                <i class="fas fa-robot"></i> AI Mentor
+            </a></li>
+            <li><a href="#connect" class="nav-link" data-section="connect">
+                <i class="fas fa-users"></i> Connect
+            </a></li>
+            <li><a href="#profile" class="nav-link" data-section="profile">
+                <i class="fas fa-user-astronaut"></i> Profile
+            </a></li>
+        </ul>
+        <div class="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line neon-icon"></i>
+                    Neural Dashboard
+                </h2>
+                <p class="section-subtitle">Track your journey beyond traditional grades</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Skill Tracker -->
+                <div class="dashboard-card glassmorphism">
+                    <div class="card-header">
+                        <h3><i class="fas fa-brain"></i> Skill Evolution</h3>
+                    </div>
+                    <div class="skill-charts">
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span class="skill-name">Critical Thinking</span>
+                                <span class="skill-level">Level 7</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="--progress: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span class="skill-name">Curiosity Drive</span>
+                                <span class="skill-level">Level 9</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="--progress: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span class="skill-name">Problem Solving</span>
+                                <span class="skill-level">Level 6</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="--progress: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="dashboard-card glassmorphism">
+                    <div class="card-header">
+                        <h3><i class="fas fa-activity"></i> Neural Activity</h3>
+                    </div>
+                    <div class="activities-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-flask"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>DNA Structure Discovery</h4>
+                                <p>Explored Watson & Crick's breakthrough</p>
+                                <span class="activity-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-chess-knight"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>Strategic Reasoning</h4>
+                                <p>Analyzed historical battle tactics</p>
+                                <span class="activity-time">1 day ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learning Paths -->
+                <div class="dashboard-card glassmorphism full-width">
+                    <div class="card-header">
+                        <h3><i class="fas fa-route"></i> Learning Pathways</h3>
+                    </div>
+                    <div class="pathway-visualization">
+                        <canvas id="pathwayCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learning Hub Section -->
+        <section id="learning" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-rocket neon-icon"></i>
+                    Learning Hub
+                </h2>
+                <p class="section-subtitle">Explore through reasoning and discovery</p>
+            </div>
+
+            <div class="learning-modules">
+                <div class="module-card glassmorphism" data-module="historical">
+                    <div class="module-icon">
+                        <i class="fas fa-scroll"></i>
+                    </div>
+                    <h3>Historical Reconstruction</h3>
+                    <p>Piece together historical events through evidence and reasoning</p>
+                    <div class="module-stats">
+                        <span><i class="fas fa-clock"></i> 45-90 min</span>
+                        <span><i class="fas fa-star"></i> Interactive</span>
+                    </div>
+                    <button class="module-btn cyber-btn">Launch Module</button>
+                </div>
+
+                <div class="module-card glassmorphism" data-module="scientific">
+                    <div class="module-icon">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <h3>Scientific Discovery</h3>
+                    <p>Recreate groundbreaking discoveries through virtual experiments</p>
+                    <div class="module-stats">
+                        <span><i class="fas fa-clock"></i> 30-60 min</span>
+                        <span><i class="fas fa-flask"></i> Experimental</span>
+                    </div>
+                    <button class="module-btn cyber-btn">Launch Module</button>
+                </div>
+
+                <div class="module-card glassmorphism" data-module="causeffect">
+                    <div class="module-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Cause & Effect Scenarios</h3>
+                    <p>Analyze complex systems and their interconnected relationships</p>
+                    <div class="module-stats">
+                        <span><i class="fas fa-clock"></i> 20-45 min</span>
+                        <span><i class="fas fa-brain"></i> Analytical</span>
+                    </div>
+                    <button class="module-btn cyber-btn">Launch Module</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Mentor Section -->
+        <section id="mentor" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-robot neon-icon"></i>
+                    Neural Mentor
+                </h2>
+                <p class="section-subtitle">Your AI guide for deeper understanding</p>
+            </div>
+
+            <div class="mentor-interface">
+                <div class="mentor-avatar glassmorphism">
+                    <div class="avatar-container">
+                        <div class="ai-face">
+                            <div class="ai-eye left"></div>
+                            <div class="ai-eye right"></div>
+                            <div class="ai-mouth"></div>
+                        </div>
+                        <div class="pulse-ring"></div>
+                    </div>
+                    <h3>ARIA</h3>
+                    <p>Advanced Reasoning Intelligence Assistant</p>
+                </div>
+
+                <div class="chat-container glassmorphism">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message mentor-message">
+                            <div class="message-content">
+                                <p>Hello! I'm ARIA, your neural learning companion. I'm here to ask the right questions that spark your curiosity and deepen your understanding. What would you like to explore today?</p>
+                            </div>
+                            <span class="message-time">now</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-container">
+                        <input type="text" id="chatInput" placeholder="Ask me anything or share your thoughts..." class="chat-input">
+                        <button id="sendMessage" class="send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Connect Section -->
+        <section id="connect" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-users neon-icon"></i>
+                    Global Learning Network
+                </h2>
+                <p class="section-subtitle">Connect anonymously through shared interests</p>
+            </div>
+
+            <div class="connect-layout">
+                <div class="avatar-creator glassmorphism">
+                    <h3><i class="fas fa-user-astronaut"></i> Your Neural Avatar</h3>
+                    <div class="avatar-display">
+                        <div class="neon-avatar" id="userAvatar">
+                            <div class="avatar-base"></div>
+                            <div class="avatar-glow"></div>
+                        </div>
+                    </div>
+                    <div class="avatar-controls">
+                        <label>Color Theme:</label>
+                        <div class="color-picker">
+                            <div class="color-option active" data-color="cyan"></div>
+                            <div class="color-option" data-color="magenta"></div>
+                            <div class="color-option" data-color="purple"></div>
+                            <div class="color-option" data-color="green"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chatrooms-list glassmorphism">
+                    <h3><i class="fas fa-comments"></i> Topic Channels</h3>
+                    <div class="chatroom-item active">
+                        <i class="fas fa-flask"></i>
+                        <span>Science Discoveries</span>
+                        <div class="online-count">127</div>
+                    </div>
+                    <div class="chatroom-item">
+                        <i class="fas fa-history"></i>
+                        <span>Historical Mysteries</span>
+                        <div class="online-count">89</div>
+                    </div>
+                    <div class="chatroom-item">
+                        <i class="fas fa-code"></i>
+                        <span>Tech Innovation</span>
+                        <div class="online-count">156</div>
+                    </div>
+                    <div class="chatroom-item">
+                        <i class="fas fa-paint-brush"></i>
+                        <span>Creative Arts</span>
+                        <div class="online-count">73</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-user-astronaut neon-icon"></i>
+                    Neural Profile
+                </h2>
+                <p class="section-subtitle">Your learning journey and achievements</p>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-stats glassmorphism">
+                    <h3>Learning Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">247</div>
+                            <div class="stat-label">Questions Explored</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">18</div>
+                            <div class="stat-label">Modules Completed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">156</div>
+                            <div class="stat-label">Hours Learning</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">42</div>
+                            <div class="stat-label">Peer Connections</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievements glassmorphism">
+                    <h3>Neural Achievements</h3>
+                    <div class="achievement-grid">
+                        <div class="achievement earned">
+                            <i class="fas fa-lightbulb"></i>
+                            <h4>Curiosity Catalyst</h4>
+                            <p>Asked 100+ thought-provoking questions</p>
+                        </div>
+                        <div class="achievement earned">
+                            <i class="fas fa-search"></i>
+                            <h4>Pattern Hunter</h4>
+                            <p>Identified 50+ cause-effect relationships</p>
+                        </div>
+                        <div class="achievement">
+                            <i class="fas fa-users"></i>
+                            <h4>Community Builder</h4>
+                            <p>Help 100+ peers in their learning journey</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Educator Toggle -->
+    <div class="educator-toggle">
+        <button id="educatorMode" class="educator-btn glassmorphism">
+            <i class="fas fa-chalkboard-teacher"></i>
+            Educator View
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/particles.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/mentor.js"></script>
+    <script src="assets/js/learning-modules.js"></script>
+    <script src="assets/js/animations.js"></script>
+</body>
+</html>

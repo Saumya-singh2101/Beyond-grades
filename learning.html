@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Learning - EduReform AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Learning Module Specific Styles */
+        .learning-container {
+            padding: 100px 2rem 2rem 2rem;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .learning-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .learning-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .learning-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .module-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .module-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            text-align: center;
+        }
+
+        .module-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(31, 38, 135, 0.4);
+        }
+
+        .module-card.active {
+            border-color: #4facfe;
+            background: rgba(79, 172, 254, 0.1);
+        }
+
+        .module-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .module-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        /* Timeline Learning Interface */
+        .timeline-interface {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .timeline-interface.active {
+            display: block;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .timeline-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .timeline-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .difficulty-selector {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            font-family: var(--font-primary);
+        }
+
+        .shuffle-btn, .check-btn, .hint-btn {
+            padding: 0.5rem 1rem;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 10px;
+            color: #ffffff;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition-fast);
+        }
+
+        .shuffle-btn:hover, .check-btn:hover, .hint-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        /* Event Pool */
+        .event-pool {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .event-pool-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #4facfe;
+        }
+
+        .events-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            min-height: 80px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        /* Timeline */
+        .timeline-container {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--accent-gradient);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .timeline-slots {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timeline-slot {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .timeline-slot:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .slot-connector {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            border: 3px solid rgba(12, 12, 12, 0.9);
+        }
+
+        .slot-drop-zone {
+            flex: 1;
+            min-height: 100px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 2rem;
+            transition: var(--transition-fast);
+            position: relative;
+        }
+
+        .slot-drop-zone.drag-over {
+            border-color: #4facfe;
+            background: rgba(79, 172, 254, 0.1);
+            transform: scale(1.05);
+        }
+
+        .slot-number {
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: var(--primary-gradient);
+            color: #ffffff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Event Cards */
+        .event-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1rem;
+            cursor: grab;
+            transition: var(--transition-smooth);
+            max-width: 300px;
+            position: relative;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+        }
+
+        .event-card.dragging {
+            opacity: 0.7;
+            transform: rotate(5deg);
+            cursor: grabbing;
+        }
+
+        .event-card.correct {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .event-card.incorrect {
+            border-color: #ff4757;
+            background: rgba(255, 71, 87, 0.1);
+        }
+
+        .event-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .event-date {
+            font-size: 0.9rem;
+            color: #4facfe;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-description {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
+        }
+
+        /* What-If Scenario Generator */
+        .scenario-generator {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .scenario-generator.active {
+            display: block;
+        }
+
+        .scenario-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .scenario-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .generate-scenario-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 15px;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .generate-scenario-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .scenario-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .scenario-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+
+        .scenario-input h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #4facfe;
+        }
+
+        .scenario-select {
+            width: 100%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: #ffffff;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            font-family: var(--font-primary);
+        }
+
+        .scenario-output {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+
+        .scenario-result {
+            background: rgba(79, 172, 254, 0.1);
+            border-left: 4px solid #4facfe;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .loading-scenario {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .loading-dots span {
+            width: 8px;
+            height: 8px;
+            background: #4facfe;
+            border-radius: 50%;
+            animation: loadingPulse 1.4s infinite;
+        }
+
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes loadingPulse {
+            0%, 60%, 100% { opacity: 0.3; transform: scale(1); }
+            30% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Progress Tracking */
+        .progress-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .scenario-content {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-slot {
+                flex-direction: column !important;
+            }
+
+            .timeline-slot:nth-child(even) {
+                flex-direction: column !important;
+            }
+
+            .slot-drop-zone {
+                margin: 1rem 0;
+            }
+
+            .timeline-line {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .learning-container {
+                padding: 100px 1rem 2rem 1rem;
+            }
+
+            .timeline-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .timeline-controls {
+                justify-content: center;
+            }
+
+            .events-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-brand">
+            <h2>EduReform AI</h2>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="learning.html" class="nav-link">Learn</a>
+            <a href="educator.html" class="nav-link">Educator</a>
+        </div>
+        <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Learning Container -->
+    <div class="learning-container">
+        <!-- Header -->
+        <div class="learning-header">
+            <h1 class="learning-title">Interactive Learning Modules</h1>
+            <p class="learning-subtitle">
+                Explore historical events through cause-effect chains and alternative scenarios. 
+                Build understanding through active reconstruction and critical thinking.
+            </p>
+        </div>
+
+        <!-- Module Selector -->
+        <div class="module-selector">
+            <div class="module-card" data-module="wwii" onclick="selectModule('wwii')">
+                <div class="module-icon">🌍</div>
+                <div class="module-title">World War II</div>
+                <div class="module-description">Reconstruct the timeline of WWII and explore alternative outcomes</div>
+            </div>
+
+            <div class="module-card" data-module="industrial" onclick="selectModule('industrial')">
+                <div class="module-icon">🏭</div>
+                <div class="module-title">Industrial Revolution</div>
+                <div class="module-description">Understand the chain of innovations that transformed society</div>
+            </div>
+
+            <div class="module-card" data-module="scientific" onclick="selectModule('scientific')">
+                <div class="module-icon">🔬</div>
+                <div class="module-title">Scientific Revolution</div>
+                <div class="module-description">Trace the development of modern scientific thinking</div>
+            </div>
+
+            <div class="module-card" data-module="renaissance" onclick="selectModule('renaissance')">
+                <div class="module-icon">🎨</div>
+                <div class="module-title">Renaissance</div>
+                <div class="module-description">Explore the cultural and intellectual rebirth of Europe</div>
+            </div>
+        </div>
+
+        <!-- Timeline Learning Interface -->
+        <div id="timelineInterface" class="timeline-interface">
+            <div class="timeline-header">
+                <div class="timeline-title" id="currentModuleTitle">World War II Timeline</div>
+                <div class="timeline-controls">
+                    <select class="difficulty-selector" id="difficultySelect" onchange="changeDifficulty()">
+                        <option value="easy">Easy (6 events)</option>
+                        <option value="medium">Medium (8 events)</option>
+                        <option value="hard">Hard (10 events)</option>
+                    </select>
+                    <button class="shuffle-btn" onclick="shuffleEvents()">Shuffle</button>
+                    <button class="hint-btn" onclick="showHint()">Hint</button>
+                    <button class="check-btn" onclick="checkTimeline()">Check</button>
+                </div>
+            </div>
+
+            <!-- Event Pool -->
+            <div class="event-pool">
+                <div class="event-pool-title">Event Pool - Drag events to the timeline below:</div>
+                <div id="eventsContainer" class="events-container">
+                    <!-- Events will be populated here -->
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                <div id="timelineSlots" class="timeline-slots">
+                    <!-- Timeline slots will be generated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- What-If Scenario Generator -->
+        <div id="scenarioGenerator" class="scenario-generator">
+            <div class="scenario-header">
+                <div class="scenario-title">What-If Scenario Generator</div>
+                <button class="generate-scenario-btn" onclick="generateScenario()">Generate Scenario</button>
+            </div>
+
+            <div class="scenario-content">
+                <div class="scenario-input">
+                    <h4>Choose Your Variables</h4>
+                    <select class="scenario-select" id="eventSelect">
+                        <option value="">Select an event to modify...</option>
+                    </select>
+                    <select class="scenario-select" id="changeType">
+                        <option value="prevented">What if this event was prevented?</option>
+                        <option value="delayed">What if this event happened later?</option>
+                        <option value="earlier">What if this event happened earlier?</option>
+                        <option value="different">What if this event happened differently?</option>
+                    </select>
+                    <select class="scenario-select" id="perspective">
+                        <option value="global">Global perspective</option>
+                        <option value="economic">Economic impact</option>
+                        <option value="social">Social consequences</option>
+                        <option value="political">Political ramifications</option>
+                    </select>
+                </div>
+
+                <div class="scenario-output">
+                    <h4>AI-Generated Scenario Analysis</h4>
+                    <div id="scenarioResult">
+                        <p style="color: rgba(255, 255, 255, 0.6);">
+                            Select your parameters and click "Generate Scenario" to explore alternative historical outcomes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="progress-section">
+            <div class="progress-header">
+                <h3>Learning Progress</h3>
+            </div>
+            <div class="progress-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="correctCount">0</div>
+                    <div class="stat-label">Correct Sequences</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="attemptsCount">0</div>
+                    <div class="stat-label">Attempts Made</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="hintsUsed">0</div>
+                    <div class="stat-label">Hints Used</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="scenariosGenerated">0</div>
+                    <div class="stat-label">Scenarios Explored</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Button (Floating) -->
+    <div id="chatButton" class="chat-button" onclick="toggleChat()">
+        <div class="chat-icon">
+            <div class="chat-dot"></div>
+            <div class="chat-dot"></div>
+            <div class="chat-dot"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="geminiAPI.js"></script>
+    <script src="chatbot.js"></script>
+    <script>
+        // Learning Module JavaScript
+        let currentModule = null;
+        let currentEvents = [];
+        let currentDifficulty = 'easy';
+        let draggedElement = null;
+        let correctSequence = [];
+        let userStats = {
+            correctCount: 0,
+            attemptsCount: 0,
+            hintsUsed: 0,
+            scenariosGenerated: 0
+        };
+
+        // Historical Events Data
+        const historicalEvents = {
+            wwii: {
+                title: "World War II Timeline",
+                events: [
+                    { id: 1, title: "Germany Invades Poland", date: "September 1, 1939", description: "Hitler's forces attack Poland, triggering WWII in Europe", year: 1939, difficulty: 'easy' },
+                    { id: 2, title: "Battle of Britain", date: "July-October 1940", description: "RAF defends Britain against German air attacks", year: 1940, difficulty: 'easy' },
+                    { id: 3, title: "Operation Barbarossa", date: "June 22, 1941", description: "Germany invades the Soviet Union", year: 1941, difficulty: 'easy' },
+                    { id: 4, title: "Pearl Harbor Attack", date: "December 7, 1941", description: "Japan attacks US naval base, bringing US into war", year: 1941, difficulty: 'easy' },
+                    { id: 5, title: "Battle of Stalingrad", date: "August 1942 - February 1943", description: "Turning point on the Eastern Front", year: 1942, difficulty: 'medium' },
+                    { id: 6, title: "D-Day Normandy Landing", date: "June 6, 1944", description: "Allied invasion of Nazi-occupied Western Europe", year: 1944, difficulty: 'easy' },
+                    { id: 7, title: "Liberation of Auschwitz", date: "January 27, 1945", description: "Soviet forces discover the concentration camp", year: 1945, difficulty: 'medium' },
+                    { id: 8, title: "Hiroshima Bombing", date: "August 6, 1945", description: "First atomic bomb used in warfare", year: 1945, difficulty: 'hard' },
+                    { id: 9, title: "VE Day", date: "May 8, 1945", description: "Victory in Europe - Germany surrenders", year: 1945, difficulty: 'medium' },
+                    { id: 10, title: "Japan Surrenders", date: "August 15, 1945", description: "Emperor announces Japan's surrender", year: 1945, difficulty: 'hard' }
+                ]
+            },
+            industrial: {
+                title: "Industrial Revolution Timeline",
+                events: [
+                    { id: 1, title: "Steam Engine Improvement", date: "1769", description: "James Watt improves the steam engine", year: 1769, difficulty: 'easy' },
+                    { id: 2, title: "Spinning Jenny Invented", date: "1764", description: "Multi-spindle spinning frame revolutionizes textile production", year: 1764, difficulty: 'easy' },
+                    { id: 3, title: "First Factory Opens", date: "1771", description: "Richard Arkwright opens first water-powered factory", year: 1771, difficulty: 'easy' },
+                    { id: 4, title: "Steam Locomotive", date: "1804", description: "Richard Trevithick builds first steam locomotive", year: 1804, difficulty: 'medium' },
+                    { id: 5, title: "Erie Canal Opens", date: "1825", description: "Canal connects Great Lakes to Atlantic Ocean", year: 1825, difficulty: 'medium' },
+                    { id: 6, title: "Telegraph Invented", date: "1837", description: "Samuel Morse develops electrical telegraph", year: 1837, difficulty: 'medium' },
+                    { id: 7, title: "Transcontinental Railroad", date: "1869", description: "First transcontinental railroad completed in US", year: 1869, difficulty: 'hard' },
+                    { id: 8, title: "Light Bulb Invented", date: "1879", description: "Edison creates practical incandescent light bulb", year: 1879, difficulty: 'hard' },
+                    { id: 9, title: "Assembly Line Production", date: "1913", description: "Ford implements moving assembly line", year: 1913, difficulty: 'hard' },
+                    { id: 10, title: "Steel Production Boom", date: "1850s", description: "Bessemer process makes steel production cheaper", year: 1855, difficulty: 'medium' }
+                ]
+            },
+            scientific: {
+                title: "Scientific Revolution Timeline",
+                events: [
+                    { id: 1, title: "Copernican Theory", date: "1543", description: "Copernicus proposes heliocentric model", year: 1543, difficulty: 'easy' },
+                    { id: 2, title: "Galileo's Telescope", date: "1609", description: "Galileo improves telescope and observes celestial bodies", year: 1609, difficulty: 'easy' },
+                    { id: 3, title: "Kepler's Laws", date: "1605-1619", description: "Kepler describes planetary motion laws", year: 1612, difficulty: 'medium' },
+                    { id: 4, title: "Harvey's Circulation", date: "1628", description: "William Harvey describes blood circulation", year: 1628, difficulty: 'easy' },
+                    { id: 5, title: "Descartes' Method", date: "1637", description: "René Descartes publishes scientific method", year: 1637, difficulty: 'medium' },
+                    { id: 6, title: "Newton's Principia", date: "1687", description: "Newton publishes laws of motion and gravitation", year: 1687, difficulty: 'easy' },
+                    { id: 7, title: "Royal Society Founded", date: "1660", description: "First formal scientific society established", year: 1660, difficulty: 'hard' },
+                    { id: 8, title: "Microscope Development", date: "1665", description: "Robert Hooke publishes Micrographia", year: 1665, difficulty: 'hard' },
+                    { id: 9, title: "Boyle's Law", date: "1662", description: "Robert Boyle describes gas pressure relationships", year: 1662, difficulty: 'medium' },
+                    { id: 10, title: "Leibniz Calculus", date: "1684", description: "Leibniz publishes differential calculus", year: 1684, difficulty: 'hard' }
+                ]
+            },
+            renaissance: {
+                title: "Renaissance Timeline",
+                events: [
+                    { id: 1, title: "Black Death Ends", date: "1350s", description: "Plague subsides, leading to economic recovery", year: 1350, difficulty: 'easy' },
+                    { id: 2, title: "Gutenberg's Printing Press", date: "1440", description: "Movable type printing revolutionizes knowledge spread", year: 1440, difficulty: 'easy' },
+                    { id: 3, title: "Fall of Constantinople", date: "1453", description: "Byzantine scholars flee to West with Greek texts", year: 1453, difficulty: 'medium' },
+                    { id: 4, title: "Lorenzo de' Medici Rules", date: "1469-1492", description: "Golden age of Florence under Medici patronage", year: 1480, difficulty: 'easy' },
+                    { id: 5, title: "Da Vinci's Peak", date: "1490s", description: "Leonardo creates his masterpieces", year: 1495, difficulty: 'easy' },
+                    { id: 6, title: "Michelangelo's Sistine Chapel", date: "1508-1512", description: "Michelangelo paints the Sistine Chapel ceiling", year: 1510, difficulty: 'medium' },
+                    { id: 7, title: "Machiavelli's 'The Prince'", date: "1513", description: "Political treatise on power and leadership", year: 1513, difficulty: 'hard' },
+                    { id: 8, title: "Protestant Reformation Begins", date: "1517", description: "Luther posts 95 Theses, challenging Catholic Church", year: 1517, difficulty: 'medium' },
+                    { id: 9, title: "Erasmus' Writings", date: "1500-1520", description: "Humanist scholar promotes education reform", year: 1510, difficulty: 'hard' },
+                    { id: 10, title: "Council of Trent", date: "1545-1563", description: "Catholic Counter-Reformation begins", year: 1554, difficulty: 'hard' }
+                ]
+            }
+        };
+
+        // Initialize learning module
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved progress
+            loadProgress();
+            
+            // Set default module
+            selectModule('wwii');
+
+            // Set up drag and drop
+            setupDragAndDrop();
+
+            console.log('Learning module initialized');
+        });
+
+        function selectModule(moduleId) {
+            // Update active module card
+            document.querySelectorAll('.module-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`[data-module="${moduleId}"]`).classList.add('active');
+
+            // Load module
+            currentModule = moduleId;
+            const moduleData = historicalEvents[moduleId];
+            
+            // Update title
+            document.getElementById('currentModuleTitle').textContent = moduleData.title;
+            
+            // Show interface
+            document.getElementById('timelineInterface').classList.add('active');
+            document.getElementById('scenarioGenerator').classList.add('active');
+            
+            // Initialize events
+            loadEvents();
+            populateScenarioSelectors();
+
+            // Set chat topic
+            if (window.eduReformChatbot) {
+                window.eduReformChatbot.setCurrentTopic(moduleData.title);
+            }
+        }
+
+        function loadEvents() {
+            if (!currentModule) return;
+            
+            const moduleData = historicalEvents[currentModule];
+            const difficulty = document.getElementById('difficultySelect').value;
+            
+            // Filter events by difficulty
+            let eventsToShow = moduleData.events.filter(event => {
+                if (difficulty === 'easy') return event.difficulty === 'easy';
+                if (difficulty === 'medium') return ['easy', 'medium'].includes(event.difficulty);
+                return true; // hard includes all
+            });
+
+            // Limit number of events
+            const maxEvents = difficulty === 'easy' ? 6 : difficulty === 'medium' ? 8 : 10;
+            eventsToShow = eventsToShow.slice(0, maxEvents);
+            
+            // Sort by year for correct sequence
+            correctSequence = [...eventsToShow].sort((a, b) => a.year - b.year);
+            
+            // Shuffle for display
+            currentEvents = [...eventsToShow].sort(() => Math.random() - 0.5);
+            
+            // Render events
+            renderEvents();
+            generateTimelineSlots();
+        }
+
+        function renderEvents() {
+            const container = document.getElementById('eventsContainer');
+            container.innerHTML = '';
+            
+            currentEvents.forEach(event => {
+                const eventCard = document.createElement('div');
+                eventCard.className = 'event-card';
+                eventCard.draggable = true;
+                eventCard.dataset.eventId = event.id;
+                
+                eventCard.innerHTML = `
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-date">${event.date}</div>
+                    <div class="event-description">${event.description}</div>
+                `;
+                
+                container.appendChild(eventCard);
+            });
+        }
+
+        function generateTimelineSlots() {
+            const slotsContainer = document.getElementById('timelineSlots');
+            slotsContainer.innerHTML = '';
+            
+            for (let i = 0; i < currentEvents.length; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'timeline-slot';
+                
+                slot.innerHTML = `
+                    <div class="slot-connector"></div>
+                    <div class="slot-drop-zone" data-slot-index="${i}">
+                        <div class="slot-number">${i + 1}</div>
+                        Drop event here
+                    </div>
+                `;
+                
+                slotsContainer.appendChild(slot);
+            }
+        }
+
+        function setupDragAndDrop() {
+            document.addEventListener('dragstart', handleDragStart);
+            document.addEventListener('dragend', handleDragEnd);
+            document.addEventListener('dragover', handleDragOver);
+            document.addEventListener('drop', handleDrop);
+            document.addEventListener('dragenter', handleDragEnter);
+            document.addEventListener('dragleave', handleDragLeave);
+        }
+
+        function handleDragStart(e) {
+            if (e.target.classList.contains('event-card')) {
+                draggedElement = e.target;
+                e.target.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/html', e.target.outerHTML);
+            }
+        }
+
+        function handleDragEnd(e) {
+            if (e.target.classList.contains('event-card')) {
+                e.target.classList.remove('dragging');
+            }
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDragEnter(e) {
+            if (e.target.classList.contains('slot-drop-zone') || e.target.closest('.slot-drop-zone')) {
+                const dropZone = e.target.classList.contains('slot-drop-zone') ? e.target : e.target.closest('.slot-drop-zone');
+                dropZone.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            if (e.target.classList.contains('slot-drop-zone')) {
+                e.target.classList.remove('drag-over');
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            
+            let dropZone = null;
+            if (e.target.classList.contains('slot-drop-zone')) {
+                dropZone = e.target;
+            } else if (e.target.closest('.slot-drop-zone')) {
+                dropZone = e.target.closest('.slot-drop-zone');
+            } else if (e.target.classList.contains('events-container')) {
+                // Return to event pool
+                if (draggedElement) {
+                    e.target.appendChild(draggedElement);
+                    draggedElement = null;
+                }
+                return;
+            }
+            
+            if (dropZone && draggedElement) {
+                dropZone.classList.remove('drag-over');
+                
+                // Clear previous content
+                const slotNumber = dropZone.querySelector('.slot-number');
+                dropZone.innerHTML = '';
+                dropZone.appendChild(slotNumber);
+                dropZone.appendChild(draggedElement);
+                
+                draggedElement = null;
+            }
+        }
+
+        function shuffleEvents() {
+            currentEvents = [...currentEvents].sort(() => Math.random() - 0.5);
+            renderEvents();
+            
+            // Return all events to pool
+            const timelineSlots = document.querySelectorAll('.slot-drop-zone');
+            timelineSlots.forEach((slot, index) => {
+                const slotNumber = slot.querySelector('.slot-number');
+                slot.innerHTML = '';
+                if (slotNumber) slot.appendChild(slotNumber);
+                slot.insertAdjacentText('beforeend', 'Drop event here');
+            });
+        }
+
+        function showHint() {
+            userStats.hintsUsed++;
+            updateStats();
+            
+            // Find first empty slot and highlight correct event
+            const slots = document.querySelectorAll('.slot-drop-zone');
+            const eventsContainer = document.getElementById('eventsContainer');
+            
+            for (let i = 0; i < slots.length; i++) {
+                const eventCard = slots[i].querySelector('.event-card');
+                if (!eventCard) {
+                    // This slot is empty, show hint for it
+                    const correctEvent = correctSequence[i];
+                    const hintCard = eventsContainer.querySelector(`[data-event-id="${correctEvent.id}"]`);
+                    
+                    if (hintCard) {
+                        hintCard.style.border = '3px solid #00ff88';
+                        hintCard.style.boxShadow = '0 0 20px rgba(0, 255, 136, 0.5)';
+                        
+                        setTimeout(() => {
+                            hintCard.style.border = '';
+                            hintCard.style.boxShadow = '';
+                        }, 3000);
+                    }
+                    
+                    window.eduReformApp.showNotification(`Hint: Look for the event from ${correctEvent.date}`, 'info');
+                    break;
+                }
+            }
+        }
+
+        function checkTimeline() {
+            userStats.attemptsCount++;
+            
+            const slots = document.querySelectorAll('.slot-drop-zone');
+            let userSequence = [];
+            let allFilled = true;
+            
+            // Get user's sequence
+            slots.forEach(slot => {
+                const eventCard = slot.querySelector('.event-card');
+                if (eventCard) {
+                    const eventId = parseInt(eventCard.dataset.eventId);
+                    userSequence.push(eventId);
+                } else {
+                    allFilled = false;
+                }
+            });
+            
+            if (!allFilled) {
+                window.eduReformApp.showNotification('Please fill all timeline positions first!', 'error');
+                return;
+            }
+            
+            // Check correctness
+            let correct = 0;
+            let isCompletelyCorrect = true;
+            
+            slots.forEach((slot, index) => {
+                const eventCard = slot.querySelector('.event-card');
+                const correctEventId = correctSequence[index].id;
+                const userEventId = parseInt(eventCard.dataset.eventId);
+                
+                eventCard.classList.remove('correct', 'incorrect');
+                
+                if (userEventId === correctEventId) {
+                    eventCard.classList.add('correct');
+                    correct++;
+                } else {
+                    eventCard.classList.add('incorrect');
+                    isCompletelyCorrect = false;
+                }
+            });
+            
+            if (isCompletelyCorrect) {
+                userStats.correctCount++;
+                window.eduReformApp.showNotification('Perfect! You got the complete timeline correct!', 'success');
+            } else {
+                window.eduReformApp.showNotification(`${correct}/${userSequence.length} events in correct position. Try again!`, 'error');
+            }
+            
+            updateStats();
+            saveProgress();
+        }
+
+        function changeDifficulty() {
+            currentDifficulty = document.getElementById('difficultySelect').value;
+            loadEvents();
+        }
+
+        function populateScenarioSelectors() {
+            if (!currentModule) return;
+            
+            const eventSelect = document.getElementById('eventSelect');
+            eventSelect.innerHTML = '<option value="">Select an event to modify...</option>';
+            
+            currentEvents.forEach(event => {
+                const option = document.createElement('option');
+                option.value = event.id;
+                option.textContent = event.title;
+                eventSelect.appendChild(option);
+            });
+        }
+
+        async function generateScenario() {
+            const eventId = document.getElementById('eventSelect').value;
+            const changeType = document.getElementById('changeType').value;
+            const perspective = document.getElementById('perspective').value;
+            
+            if (!eventId) {
+                window.eduReformApp.showNotification('Please select an event first!', 'error');
+                return;
+            }
+            
+            const selectedEvent = currentEvents.find(e => e.id == eventId);
+            const resultContainer = document.getElementById('scenarioResult');
+            
+            // Show loading
+            resultContainer.innerHTML = `
+                <div class="loading-scenario">
+                    <div class="loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span>AI is generating scenario analysis...</span>
+                </div>
+            `;
+            
+            try {
+                // Create scenario prompt for AI
+                const prompt = `Analyze this historical what-if scenario:
+                
+                Original Event: ${selectedEvent.title} (${selectedEvent.date})
+                Description: ${selectedEvent.description}
+                
+                Scenario: ${changeType} this event
+                Perspective: Focus on ${perspective} aspects
+                
+                Provide a thoughtful analysis of potential consequences, considering cause-and-effect relationships and historical context. Keep response concise but insightful.`;
+                
+                const response = await geminiAPI.sendMessage(prompt, {
+                    temperature: 0.8,
+                    maxTokens: 400
+                });
+                
+                resultContainer.innerHTML = `
+                    <div class="scenario-result">
+                        <h5>What if: ${selectedEvent.title} ${changeType.replace('prevented', 'was prevented').replace('delayed', 'was delayed').replace('earlier', 'happened earlier').replace('different', 'happened differently')}?</h5>
+                        <p>${response}</p>
+                    </div>
+                `;
+                
+                userStats.scenariosGenerated++;
+                updateStats();
+                saveProgress();
+                
+            } catch (error) {
+                console.error('Error generating scenario:', error);
+                resultContainer.innerHTML = `
+                    <div class="scenario-result">
+                        <h5>Alternative Scenario Analysis</h5>
+                        <p>If ${selectedEvent.title} ${changeType}, it could have significantly altered the course of ${currentModule === 'wwii' ? 'World War II' : currentModule}. 
+                        This change might have created a cascade of different outcomes, affecting political alliances, economic conditions, and social developments. 
+                        Consider how interconnected historical events are - changing one element can reshape entire timelines.</p>
+                        <p><em>Note: AI analysis temporarily unavailable. This is a simplified example of historical counterfactual reasoning.</em></p>
+                    </div>
+                `;
+                
+                userStats.scenariosGenerated++;
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('correctCount').textContent = userStats.correctCount;
+            document.getElementById('attemptsCount').textContent = userStats.attemptsCount;
+            document.getElementById('hintsUsed').textContent = userStats.hintsUsed;
+            document.getElementById('scenariosGenerated').textContent = userStats.scenariosGenerated;
+        }
+
+        function saveProgress() {
+            localStorage.setItem('eduReformLearningProgress', JSON.stringify(userStats));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('eduReformLearningProgress');
+            if (saved) {
+                userStats = {...userStats, ...JSON.parse(saved)};
+                updateStats();
+            }
+        }
+    </script>
+</body>
+</html>

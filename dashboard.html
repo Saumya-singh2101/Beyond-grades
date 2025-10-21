@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EduReform AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Additional Dashboard-specific styles */
+        .dashboard-container {
+            padding: 100px 2rem 2rem 2rem;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .user-welcome h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-welcome p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .skill-map-section {
+            grid-column: 1;
+            grid-row: 1 / 3;
+        }
+
+        .ai-insights-section {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .recent-activities {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        .dashboard-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--glass-shadow);
+            transition: var(--transition-smooth);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-gradient);
+            border-radius: 8px;
+        }
+
+        /* Skill Map Styles */
+        .skill-radar {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 2rem auto;
+        }
+
+        .radar-chart {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .skill-items {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .skill-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .skill-name {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+        }
+
+        .skill-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        .skill-score {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-left: auto;
+        }
+
+        /* Career Path Suggestions */
+        .career-paths {
+            margin-top: 2rem;
+        }
+
+        .career-path {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .career-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .career-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .career-match {
+            font-size: 0.8rem;
+            color: #4facfe;
+            font-weight: 500;
+        }
+
+        /* AI Insights */
+        .insight-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid #4facfe;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .insight-title {
+            font-weight: 600;
+            color: #4facfe;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Activity Feed */
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--secondary-gradient);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .activity-content h4 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Bottom Grid */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .progress-chart {
+            height: 200px;
+            position: relative;
+            display: flex;
+            align-items: end;
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+
+        .progress-bar-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar-visual {
+            width: 40px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill-visual {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: var(--accent-gradient);
+            border-radius: 20px;
+            transition: height 1.5s ease;
+        }
+
+        .progress-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .quick-action {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .quick-action:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .quick-action-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+
+            .skill-map-section {
+                grid-column: 1;
+                grid-row: auto;
+            }
+
+            .ai-insights-section {
+                grid-column: 1;
+                grid-row: auto;
+            }
+
+            .recent-activities {
+                grid-column: 1;
+                grid-row: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 100px 1rem 2rem 1rem;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .skill-radar {
+                width: 250px;
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-brand">
+            <h2>EduReform AI</h2>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="learning.html" class="nav-link">Learn</a>
+            <a href="educator.html" class="nav-link">Educator</a>
+        </div>
+        <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="user-welcome">
+                <h1>Welcome back, <span id="userName">Student</span>!</h1>
+                <p>Continue your learning journey with personalized AI guidance</p>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Skill Map Section -->
+            <div class="skill-map-section dashboard-card">
+                <div class="card-title">
+                    <div class="card-icon"></div>
+                    Cognitive Skill Map
+                </div>
+                
+                <!-- Radar Chart Placeholder -->
+                <div class="skill-radar">
+                    <canvas id="skillRadarChart" class="radar-chart"></canvas>
+                </div>
+
+                <!-- Skill Items -->
+                <div class="skill-items">
+                    <div class="skill-item">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span class="skill-name">Critical Thinking</span>
+                            <span class="skill-score">85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-item">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span class="skill-name">Creative Problem Solving</span>
+                            <span class="skill-score">72%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: 72%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-item">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span class="skill-name">Analytical Reasoning</span>
+                            <span class="skill-score">91%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: 91%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-item">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span class="skill-name">Communication</span>
+                            <span class="skill-score">68%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: 68%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-item">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span class="skill-name">Research Skills</span>
+                            <span class="skill-score">79%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: 79%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-item">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span class="skill-name">Pattern Recognition</span>
+                            <span class="skill-score">83%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" style="width: 83%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Career Path Suggestions -->
+                <div class="career-paths">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.2rem;">Recommended Career Paths</h3>
+                    
+                    <div class="career-path">
+                        <div class="career-icon">DS</div>
+                        <div class="career-info">
+                            <h4>Data Scientist</h4>
+                            <p class="career-match">89% match based on analytical skills</p>
+                        </div>
+                    </div>
+                    
+                    <div class="career-path">
+                        <div class="career-icon">SE</div>
+                        <div class="career-info">
+                            <h4>Software Engineer</h4>
+                            <p class="career-match">82% match based on problem solving</p>
+                        </div>
+                    </div>
+                    
+                    <div class="career-path">
+                        <div class="career-icon">RA</div>
+                        <div class="career-info">
+                            <h4>Research Analyst</h4>
+                            <p class="career-match">86% match based on research skills</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Insights Section -->
+            <div class="ai-insights-section dashboard-card">
+                <div class="card-title">
+                    <div class="card-icon"></div>
+                    AI Personalized Insights
+                </div>
+                
+                <div id="aiInsightsList">
+                    <div class="insight-item">
+                        <div class="insight-title">Strength Identified</div>
+                        <div class="insight-text">Your analytical reasoning shows exceptional growth. Consider exploring data science modules to leverage this strength.</div>
+                    </div>
+                    
+                    <div class="insight-item">
+                        <div class="insight-title">Growth Opportunity</div>
+                        <div class="insight-text">Communication skills need attention. Try participating in more group discussions and presentation exercises.</div>
+                    </div>
+                    
+                    <div class="insight-item">
+                        <div class="insight-title">Learning Pattern</div>
+                        <div class="insight-text">You learn best through visual examples and hands-on practice. Interactive modules are recommended.</div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="generateNewInsights()" style="width: 100%; margin-top: 1rem;">
+                    Generate New Insights
+                </button>
+            </div>
+
+            <!-- Recent Activities -->
+            <div class="recent-activities dashboard-card">
+                <div class="card-title">
+                    <div class="card-icon"></div>
+                    Recent Learning Activities
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">📚</div>
+                    <div class="activity-content">
+                        <h4>Completed: World War II Timeline</h4>
+                        <p class="activity-time">2 hours ago</p>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">🧠</div>
+                    <div class="activity-content">
+                        <h4>AI Mentor Session: Critical Thinking</h4>
+                        <p class="activity-time">1 day ago</p>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">🎯</div>
+                    <div class="activity-content">
+                        <h4>Skill Assessment: Problem Solving</h4>
+                        <p class="activity-time">2 days ago</p>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">💡</div>
+                    <div class="activity-content">
+                        <h4>What-If Scenario: Scientific Revolution</h4>
+                        <p class="activity-time">3 days ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Grid -->
+        <div class="bottom-grid">
+            <!-- Progress Chart -->
+            <div class="dashboard-card">
+                <div class="card-title">
+                    <div class="card-icon"></div>
+                    Weekly Progress
+                </div>
+                
+                <div class="progress-chart">
+                    <div class="progress-bar-item">
+                        <div class="progress-bar-visual">
+                            <div class="progress-fill-visual" style="height: 80%"></div>
+                        </div>
+                        <div class="progress-label">Mon</div>
+                    </div>
+                    <div class="progress-bar-item">
+                        <div class="progress-bar-visual">
+                            <div class="progress-fill-visual" style="height: 65%"></div>
+                        </div>
+                        <div class="progress-label">Tue</div>
+                    </div>
+                    <div class="progress-bar-item">
+                        <div class="progress-bar-visual">
+                            <div class="progress-fill-visual" style="height: 90%"></div>
+                        </div>
+                        <div class="progress-label">Wed</div>
+                    </div>
+                    <div class="progress-bar-item">
+                        <div class="progress-bar-visual">
+                            <div class="progress-fill-visual" style="height: 70%"></div>
+                        </div>
+                        <div class="progress-label">Thu</div>
+                    </div>
+                    <div class="progress-bar-item">
+                        <div class="progress-bar-visual">
+                            <div class="progress-fill-visual" style="height: 85%"></div>
+                        </div>
+                        <div class="progress-label">Fri</div>
+                    </div>
+                    <div class="progress-bar-item">
+                        <div class="progress-bar-visual">
+                            <div class="progress-fill-visual" style="height: 45%"></div>
+                        </div>
+                        <div class="progress-label">Sat</div>
+                    </div>
+                    <div class="progress-bar-item">
+                        <div class="progress-bar-visual">
+                            <div class="progress-fill-visual" style="height: 30%"></div>
+                        </div>
+                        <div class="progress-label">Sun</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="dashboard-card">
+                <div class="card-title">
+                    <div class="card-icon"></div>
+                    Quick Actions
+                </div>
+                
+                <div class="quick-actions">
+                    <a href="learning.html" class="quick-action">
+                        <div class="quick-action-icon">📖</div>
+                        <div>Start Learning</div>
+                    </a>
+                    
+                    <div class="quick-action" onclick="toggleChat()">
+                        <div class="quick-action-icon">🤖</div>
+                        <div>AI Mentor</div>
+                    </div>
+                    
+                    <div class="quick-action" onclick="takeAssessment()">
+                        <div class="quick-action-icon">📊</div>
+                        <div>Assessment</div>
+                    </div>
+                    
+                    <div class="quick-action" onclick="viewProgress()">
+                        <div class="quick-action-icon">📈</div>
+                        <div>Progress Report</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Button (Floating) -->
+    <div id="chatButton" class="chat-button" onclick="toggleChat()">
+        <div class="chat-icon">
+            <div class="chat-dot"></div>
+            <div class="chat-dot"></div>
+            <div class="chat-dot"></div>
+        </div>
+    </div>
+
+    <!-- Chat Window -->
+    <div id="chatWindow" class="chat-window">
+        <div class="chat-header">
+            <h4>AI Mentor</h4>
+            <button class="modal-close" onclick="toggleChat()">&times;</button>
+        </div>
+        <div id="chatMessages" class="chat-messages">
+            <div class="chat-message ai">
+                Hello! I'm your AI mentor. I notice your analytical reasoning is very strong. Would you like to explore some advanced problem-solving scenarios?
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Ask me anything...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="geminiAPI.js"></script>
+    <script src="chatbot.js"></script>
+    <script>
+        // Dashboard-specific JavaScript
+        function generateNewInsights() {
+            const insights = [
+                {
+                    title: "Learning Style Detected",
+                    text: "You prefer step-by-step explanations with visual aids. Consider kinesthetic learning approaches."
+                },
+                {
+                    title: "Peak Performance Time",
+                    text: "Your engagement is highest during morning sessions. Schedule challenging topics for 9-11 AM."
+                },
+                {
+                    title: "Collaboration Opportunity",
+                    text: "You excel in individual work but could benefit from peer learning for complex topics."
+                },
+                {
+                    title: "Interest Pattern",
+                    text: "Strong attraction to historical cause-effect relationships. Consider studying economics or political science."
+                }
+            ];
+            
+            const randomInsights = insights.sort(() => 0.5 - Math.random()).slice(0, 3);
+            const insightsList = document.getElementById('aiInsightsList');
+            
+            insightsList.innerHTML = randomInsights.map(insight => `
+                <div class="insight-item fade-in">
+                    <div class="insight-title">${insight.title}</div>
+                    <div class="insight-text">${insight.text}</div>
+                </div>
+            `).join('');
+        }
+
+        function takeAssessment() {
+            // Simulated assessment
+            alert('Assessment feature coming soon! This would launch a personalized skill assessment based on your current progress.');
+        }
+
+        function viewProgress() {
+            // Simulated progress view
+            alert('Detailed progress analytics coming soon! This would show comprehensive learning analytics.');
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set demo user name
+            document.getElementById('userName').textContent = 'Student';
+
+            // Draw skill radar chart
+            drawSkillRadar();
+
+            // Animate progress bars
+            setTimeout(() => {
+                document.querySelectorAll('.skill-fill').forEach(bar => {
+                    bar.style.width = bar.style.width;
+                });
+                
+                document.querySelectorAll('.progress-fill-visual').forEach(bar => {
+                    bar.style.height = bar.style.height;
+                });
+            }, 500);
+        });
+
+        function drawSkillRadar() {
+            const canvas = document.getElementById('skillRadarChart');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            canvas.width = 300;
+            canvas.height = 300;
+            
+            const centerX = 150;
+            const centerY = 150;
+            const radius = 100;
+            
+            // Skills data
+            const skills = [
+                { name: 'Critical Thinking', value: 0.85 },
+                { name: 'Creativity', value: 0.72 },
+                { name: 'Analysis', value: 0.91 },
+                { name: 'Communication', value: 0.68 },
+                { name: 'Research', value: 0.79 },
+                { name: 'Pattern Recognition', value: 0.83 }
+            ];
+            
+            // Draw radar grid
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 1;
+            
+            // Draw concentric circles
+            for (let i = 1; i <= 5; i++) {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, (radius / 5) * i, 0, 2 * Math.PI);
+                ctx.stroke();
+            }
+            
+            // Draw lines from center
+            const angleStep = (2 * Math.PI) / skills.length;
+            for (let i = 0; i < skills.length; i++) {
+                const angle = i * angleStep - Math.PI / 2;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(
+                    centerX + Math.cos(angle) * radius,
+                    centerY + Math.sin(angle) * radius
+                );
+                ctx.stroke();
+            }
+            
+            // Draw skill data
+            ctx.strokeStyle = '#4facfe';
+            ctx.fillStyle = 'rgba(79, 172, 254, 0.2)';
+            ctx.lineWidth = 2;
+            
+            ctx.beginPath();
+            for (let i = 0; i < skills.length; i++) {
+                const angle = i * angleStep - Math.PI / 2;
+                const distance = skills[i].value * radius;
+                const x = centerX + Math.cos(angle) * distance;
+                const y = centerY + Math.sin(angle) * distance;
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            
+            // Draw data points
+            ctx.fillStyle = '#4facfe';
+            for (let i = 0; i < skills.length; i++) {
+                const angle = i * angleStep - Math.PI / 2;
+                const distance = skills[i].value * radius;
+                const x = centerX + Math.cos(angle) * distance;
+                const y = centerY + Math.sin(angle) * distance;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
+    </script>
+</body>
+</html>
